@@ -17,33 +17,40 @@ public class PersonRestController {
         this.personRepository = personRepository;
     }
 
+    //Получить список персонала
     @GetMapping
     public ResponseEntity<Iterable<Person>> getPersonList() {
         return new ResponseEntity<>(personRepository.findAll(), HttpStatus.OK);
     }
 
+    //Получить данные по id персонала
     @GetMapping("{id}")
     public ResponseEntity<Person> getPersonId(@PathVariable Long id) {
         return new ResponseEntity<>(personRepository.findById(id).orElseThrow(RuntimeException::new), HttpStatus.OK);
     }
 
+    //Получить данные по персоналу
     @GetMapping("/findPerson")
     public ResponseEntity<Person> getByFullName(@RequestParam(value = "name") String name,
                                                 @RequestParam(value = "surname") String surname,
                                                 @RequestParam(value = "patroymic") String patroymic) {
-        if(personRepository.findPersonByFullName(name, surname, patroymic) == null){
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
-        }else{return new ResponseEntity<>(personRepository.findPersonByFullName(name, surname, patroymic), HttpStatus.OK);}
+        if (personRepository.findPersonByFullName(name, surname, patroymic) == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(personRepository.findPersonByFullName(name, surname, patroymic), HttpStatus.OK);
+        }
 
 
     }
 
+    //Получить список персонал по имени
     @GetMapping("/findPerson/position")
     public ResponseEntity<Person> getByPosition(@RequestParam(value = "position") String position) {
 
         return new ResponseEntity<>(personRepository.findByPosition(position), HttpStatus.OK);
     }
 
+    //Удалить кого-то из персонала
     @DeleteMapping("/delete")
     public ResponseEntity<Person> getByName(@RequestParam(value = "name") String name,
                                             @RequestParam(value = "surname") String surname,
@@ -56,6 +63,7 @@ public class PersonRestController {
         }
     }
 
+    //Добавить персонал
     @PostMapping
     public ResponseEntity<Person> createPerson(@RequestBody Person person) {
         Person savePerson = personRepository.save(person);
